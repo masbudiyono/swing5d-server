@@ -2,7 +2,7 @@ import asyncio
 import os
 import json
 from datetime import datetime
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
 import uvicorn
 import pandas as pd
@@ -98,13 +98,110 @@ async def startup_event():
         scan_stocks()
     asyncio.create_task(cron_loop())
 
+HTML_UI = """<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SWING5D - Serverless Mirror</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen">
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <header class="flex justify-between items-center border-b border-slate-800 pb-4 mb-8">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-emerald-400">SWING5D</h1>
+        <p class="text-xs text-slate-400">Horizon Swing 1–5 Hari | IHSG Liquid</p>
+      </div>
+      <div id="last-update" class="text-xs text-slate-500 font-mono">Memuat data...</div>
+    </header>
+
+    <section class="mb-8">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-lg font-semibold text-slate-200">Watchlist Saham Liquid & Buy Zone</h2>
+          <p class="text-sm text-slate-400">Disaring berdasarkan Likuiditas (AvgVol20 &ge; 1M), RRR &ge; 1.5x</p>
+        </div>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-950 text-emerald-300 border border-emerald-800">
+          Auto-Scan 5m Aktif
+        </span>
+      </div>
+      
+      <div class="overflow-x-auto rounded-lg border border-slate-800 bg-slate-900/60">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-900 text-slate-400 text-xs uppercase border-b border-slate-800">
+            <tr>
+              <th class="px-4 py-3">Ticker</th>
+              <th class="px-4 py-3">Close</th>
+              <th class="px-4 py-3">Potensi</th>
+              <th class="px-4 py-3">Risiko</th>
+              <th class="px-4 py-3">RRR</th>
+              <th class="px-4 py-3">Zona</th>
+              <th class="px-4 py-3">Likuiditas</th>
+              <th class="px-4 py-3">Plan (TP/SL)</th>
+            </tr>
+          </thead>
+          <tbody id="table-body" class="divide-y divide-slate-800">
+            <tr><td colspan="8" class="text-center py-6 text-slate-500">Memuat hasil screening...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="text-center text-xs text-slate-600 border-t border-slate-900 pt-6 mt-12">
+      SWING5D Standalone Engine &bull; Render Cloud
+    </footer>
+  </div>
+
+  <script>
+    async function loadData() {
+      try {
+        const res = await fetch('/api/screener');
+        const json = await res.json();
+        document.getElementById('last-update').innerText = 'Update: ' + (json.updated_at || '-');
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = '';
+
+        if (!json.data || json.data.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="text-center py-6 text-slate-500">Tidak ada emiten di Buy Zone saat ini.</td></tr>';
+          return;
+        }
+
+        json.data.forEach(item => {
+          const tr = document.createElement('tr');
+          tr.className = "hover:bg-slate-800/40 transition";
+          
+          let zoneBadge = "bg-slate-800 text-slate-300";
+          if (item.zone === "IN_BUY_ZONE") zoneBadge = "bg-emerald-950 text-emerald-300 border border-emerald-800";
+          else if (item.zone === "BREAKOUT") zoneBadge = "bg-blue-950 text-blue-300 border border-blue-800";
+          else if (item.zone === "HOLD") zoneBadge = "bg-amber-950 text-amber-300 border border-amber-800";
+
+          tr.innerHTML = `
+            <td class="px-4 py-3 font-bold text-white">${item.symbol}</td>
+            <td class="px-4 py-3 font-mono">${item.close.toLocaleString('id-ID')}</td>
+            <td class="px-4 py-3 font-semibold text-emerald-400">+${item.potensi_naik}%</td>
+            <td class="px-4 py-3 font-semibold text-rose-400">-${item.risiko_turun}%</td>
+            <td class="px-4 py-3 font-mono text-cyan-300">${item.rrr}x</td>
+            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs ${zoneBadge}">${item.zone}</span></td>
+            <td class="px-4 py-3 text-xs text-slate-400">${item.liquidity}</td>
+            <td class="px-4 py-3 text-xs font-mono text-slate-300">TP: ${item.tp} | SL: ${item.sl}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        document.getElementById('table-body').innerHTML = '<tr><td colspan="8" class="text-center py-6 text-rose-500">Gagal memuat data screener.</td></tr>';
+      }
+    }
+    loadData();
+    setInterval(loadData, 60000);
+  </script>
+</body>
+</html>
+"""
+
 @app.get("/", response_class=HTMLResponse)
 async def index():
-    html_path = os.path.join(os.path.dirname(__file__), "index.html")
-    if os.path.exists(html_path):
-        with open(html_path, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
-    return HTMLResponse(content="<h1>SWING5D Server Running</h1><p><a href='/api/screener'>View API</a></p>")
+    return HTMLResponse(content=HTML_UI)
 
 @app.get("/api/screener")
 async def get_screener():
