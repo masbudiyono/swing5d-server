@@ -1,0 +1,1033 @@
+
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://i.ibb.co.com" crossorigin>
+<link rel="dns-prefetch" href="https://i.ibb.co.com">
+<title>SWING5D - Analisis Saham Swing Trading 1–5 Hari</title>
+<meta name="description" content="SWING5D membantu screening saham swing trading 1-5 hari dengan AI ranking, matrix indikator, zona harga, TP/SL, dan analisis yang mudah dibaca.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://swing5d.com">
+<meta property="og:type" content="website">
+<meta property="og:title" content="SWING5D - Analisis Saham Swing Trading 1–5 Hari">
+<meta property="og:description" content="Screener saham Indonesia untuk swing trading 1–5 hari dengan AI ranking, zona harga, TP/SL, dan matrix indikator.">
+<meta property="og:url" content="https://swing5d.com">
+<meta name="twitter:card" content="summary">
+<link id="themeCss" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/flatly/bootstrap.min.css" rel="stylesheet">
+<script>
+  (function(){
+    const allowed = new Set(["default","brite","cerulean","cosmo","cyborg","darkly","flatly","journal","litera","lumen","lux","materia","minty","morph","pulse","quartz","sandstone","simplex","sketchy","slate","solar","spacelab","superhero","united","vapor","yeti","zephyr","dark-fintech","dark-slate","light-flatly"]);
+    let theme = "flatly";
+    try{ theme = localStorage.getItem("ss5d_theme") || localStorage.getItem("sw5d_active_theme") || "flatly"; }catch(e){}
+    if(theme === "dark-fintech") theme = "darkly";
+    else if(theme === "dark-slate") theme = "slate";
+    else if(theme === "light-flatly") theme = "flatly";
+    if(!allowed.has(theme)) theme = "flatly";
+    const link = document.getElementById("themeCss");
+    if(link){
+      link.href = theme === "default"
+        ? "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        : "https://cdn.jsdelivr.net/npm/bootswatch@5.3.8/dist/" + theme + "/bootstrap.min.css";
+    }
+    document.documentElement.setAttribute("data-ss5d-theme", theme);
+  })();
+</script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+<style>
+:root{
+  --s5d-bg:#07111f;
+  --s5d-bg2:#0b1730;
+  --s5d-card:#ffffff;
+  --s5d-text:#0f172a;
+  --s5d-muted:#64748b;
+  --s5d-soft:#f5f9ff;
+  --s5d-line:rgba(15,23,42,.10);
+  --s5d-primary:#2563eb;
+  --s5d-primary2:#0ea5e9;
+  --s5d-success:#10b981;
+  --s5d-warning:#f59e0b;
+  --s5d-danger:#ef4444;
+  --s5d-shadow:0 26px 80px rgba(15,23,42,.14);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+
+html, body {
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  position: relative;
+}
+
+body{font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fbff;color:var(--s5d-text);overflow-x:hidden}
+a{text-decoration:none}.text-muted{color:var(--s5d-muted)!important}.section-pad{padding:88px 0}.s5d-navbar{background:rgba(255,255,255,.90);backdrop-filter:blur(16px);border-bottom:1px solid rgba(15,23,42,.07)}.brand-logo{display:flex;align-items:center;gap:.65rem;font-weight:950;letter-spacing:.06em;color:#0f172a}.brand-mark{width:38px;height:38px;border-radius:4px;display:grid;place-items:center;background:linear-gradient(135deg,var(--s5d-primary),var(--s5d-primary2));color:#fff;box-shadow:0 12px 28px rgba(37,99,235,.28)}.nav-link{font-weight:700;color:#334155!important}.nav-link:hover{color:var(--s5d-primary)!important}.btn-pill{border-radius:4px;padding:.72rem 1rem;font-weight:800}.btn-glow{box-shadow:0 18px 38px rgba(37,99,235,.28)}
+.hero{position:relative;min-height:calc(100vh - 76px);display:flex;align-items:center;overflow:hidden;background:radial-gradient(circle at 8% 10%,rgba(14,165,233,.20),transparent 30%),radial-gradient(circle at 88% 12%,rgba(37,99,235,.18),transparent 32%),linear-gradient(180deg,#f8fbff 0%,#eef7ff 100%)}.hero:before{content:"";position:absolute;inset:auto -18% -28% auto;width:680px;height:680px;border-radius:50%;background:rgba(16,185,129,.09);filter:blur(2px)}.hero-grid{position:relative;z-index:1}.kicker{display:inline-flex;align-items:center;gap:.5rem;padding:.48rem .75rem;border:1px solid rgba(37,99,235,.18);background:#fff;border-radius:4px;color:#1d4ed8;font-weight:900;font-size:.88rem;box-shadow:0 10px 24px rgba(15,23,42,.06)}.hero-title{font-weight:950;letter-spacing:-.072em;line-height:.98;font-size:clamp(2.35rem,5.9vw,5.55rem);margin:18px 0;color:#07111f}.hero-title .accent{background:linear-gradient(135deg,#2563eb,#0ea5e9,#10b981);-webkit-background-clip:text;background-clip:text;color:transparent}.hero-sub{font-size:clamp(1rem,1.55vw,1.28rem);line-height:1.75;max-width:680px;color:#475569}.hero-actions{display:flex;flex-wrap:wrap;gap:.85rem;margin:30px 0 18px}.trust-row{display:flex;flex-wrap:wrap;gap:.75rem;margin-top:22px}.trust-chip{display:inline-flex;gap:.45rem;align-items:center;background:rgba(255,255,255,.82);border:1px solid rgba(15,23,42,.08);border-radius:4px;padding:.52rem .75rem;color:#334155;font-weight:700;font-size:.9rem}.hero-panel{position:relative}.visual-shell{border-radius:6px;overflow:hidden;background:#091222;box-shadow:0 36px 110px rgba(15,23,42,.24);border:1px solid rgba(255,255,255,.58)}.hero-img{display:block;width:100%;min-height:480px;object-fit:cover}.dashboard-mock{min-height:520px;padding:22px;background:linear-gradient(145deg,#07111f 0%,#0e2a4f 58%,#0d9488 140%);color:#e2e8f0}.mock-top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.traffic{display:flex;gap:8px}.traffic span{width:12px;height:12px;border-radius:50%;background:#ef4444}.traffic span:nth-child(2){background:#f59e0b}.traffic span:nth-child(3){background:#22c55e}.mock-badge{background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.28);color:#bbf7d0;border-radius:4px;padding:.35rem .62rem;font-size:.78rem;font-weight:800}.mock-card{background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12);border-radius:6px;padding:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,.08)}.mock-card + .mock-card{margin-top:14px}.mock-chart{height:176px;margin-top:14px;border-radius:4px;position:relative;overflow:hidden;background:linear-gradient(180deg,rgba(14,165,233,.20),rgba(16,185,129,.07))}.candle{position:absolute;bottom:20px;width:9px;border-radius:7px;background:#38bdf8}.candle:before{content:"";position:absolute;left:4px;top:-20px;width:1px;height:54px;background:inherit}.metric{padding:14px;border-radius:4px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.10)}.metric b{display:block;color:#fff;font-size:1.15rem}.metric small{color:#94a3b8}.floating-card{position:absolute;right:-10px;bottom:36px;background:#fff;color:#0f172a;border-radius:6px;box-shadow:var(--s5d-shadow);padding:16px;max-width:255px;border:1px solid rgba(15,23,42,.08)}.floating-card strong{display:block}.stat-band{position:relative;z-index:2;margin-top:-34px}.stat-card{background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:6px;box-shadow:0 18px 44px rgba(15,23,42,.08);padding:18px;height:100%}.stat-card h3{font-size:1.78rem;margin:0;font-weight:950}.stat-card p{margin:3px 0 0;color:var(--s5d-muted);font-size:.93rem}.section-head{max-width:790px;margin:0 auto 44px;text-align:center}.section-title{font-size:clamp(1.9rem,3.6vw,3.35rem);font-weight:950;letter-spacing:-.055em;line-height:1.04;color:#0f172a}.section-desc{font-size:1.08rem;line-height:1.7;color:#64748b}.feature-card{height:100%;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:6px;box-shadow:0 16px 50px rgba(15,23,42,.07);padding:24px;transition:transform .2s ease,box-shadow .2s ease}.feature-card:hover{transform:translateY(-5px);box-shadow:0 26px 70px rgba(15,23,42,.12)}.feature-icon{width:54px;height:54px;border-radius:6px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(37,99,235,.12),rgba(14,165,233,.10));color:#1d4ed8;font-size:1.45rem;margin-bottom:16px}.feature-card h4{font-weight:900;letter-spacing:-.02em}.benefit-section{background:linear-gradient(180deg,#fff 0%,#f5f9ff 100%)}.benefit-panel{background:#0f172a;color:#e5e7eb;border-radius:6px;box-shadow:0 30px 92px rgba(15,23,42,.20);overflow:hidden}.benefit-copy{padding:42px}.benefit-copy h2{color:#fff}.benefit-list{display:grid;gap:14px;margin-top:22px}.benefit-item{display:flex;gap:12px;align-items:flex-start}.benefit-item i{color:#34d399;font-size:1.25rem;flex:0 0 auto}.benefit-image-wrap{min-height:100%;background:linear-gradient(135deg,#e0f2fe,#dbeafe);padding:20px;display:flex;align-items:center}.feature-img{width:100%;border-radius:6px;box-shadow:0 18px 54px rgba(15,23,42,.18);object-fit:cover;max-height:520px}.mini-visual{width:100%;padding:20px}.mini-row{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border-radius:4px;padding:14px 16px;margin-bottom:12px;color:#0f172a;box-shadow:0 14px 38px rgba(15,23,42,.10)}.mini-row .score{font-weight:950;color:#16a34a}.workflow{background:#08111f;color:#e2e8f0}.workflow .section-title{color:#fff}.step-card{height:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:6px;padding:22px}.step-no{width:42px;height:42px;border-radius:4px;display:grid;place-items:center;background:linear-gradient(135deg,#2563eb,#0ea5e9);font-weight:950;color:#fff;margin-bottom:18px}.price-card{position:relative;height:100%;background:#fff;border:1px solid rgba(15,23,42,.08);border-radius:6px;padding:26px;box-shadow:0 16px 52px rgba(15,23,42,.08);display:flex;flex-direction:column}.price-card.popular{border:2px solid rgba(37,99,235,.42);transform:translateY(-8px);box-shadow:0 26px 80px rgba(37,99,235,.15)}.popular-ribbon{position:absolute;right:22px;top:20px;background:#dbeafe;color:#1d4ed8;border-radius:4px;font-weight:900;padding:.42rem .7rem;font-size:.78rem}.price-value{font-weight:950;font-size:clamp(2rem,3vw,2.7rem);letter-spacing:-.05em;color:#0f172a}.price-desc{color:#64748b;min-height:62px}.price-card .btn{margin-top:auto}.disclaimer-box{background:#fff7ed;border:1px solid rgba(245,158,11,.32);border-left:6px solid #f59e0b;border-radius:6px;padding:22px;color:#7c2d12}.final-cta{position:relative;overflow:hidden;border-radius:6px;background:linear-gradient(135deg,#0f172a 0%,#1e40af 55%,#0ea5e9 120%);color:#fff;box-shadow:0 30px 90px rgba(37,99,235,.23);padding:44px}.final-cta:before{content:"";position:absolute;right:-80px;top:-90px;width:260px;height:260px;background:rgba(255,255,255,.13);border-radius:50%}.final-cta h2{font-size:clamp(1.9rem,3.8vw,3.25rem);font-weight:950;letter-spacing:-.05em;color:#fff}.final-cta p{color:#dbeafe}.footer{background:#fff;border-top:1px solid rgba(15,23,42,.08)}.mobile-cta{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:1040;background:#0f172a;border:1px solid rgba(255,255,255,.10);box-shadow:0 18px 50px rgba(15,23,42,.25);border-radius:6px;padding:10px}.mobile-cta .btn{border-radius:4px;font-weight:900}.small-note{font-size:.84rem;color:#64748b}
+@media (max-width: 991.98px) {
+  .hero:before { display: none !important; }
+
+/* Minimalist Sharp Corners Override */
+.kicker, .btn-pill, .trust-chip, .popular-ribbon, .mock-badge, .badge, .btn {
+  border-radius: 4px !important;
+}
+.brand-mark, .feature-icon, .step-no, .metric, .mini-row, .mock-chart {
+  border-radius: 4px !important;
+}
+.visual-shell, .mock-card, .floating-card, .stat-card, .feature-card, 
+.benefit-panel, .feature-img, .step-card, .price-card, .disclaimer-box, .final-cta, .mobile-cta, .card {
+  border-radius: 6px !important;
+}
+
+  .hero-panel { overflow: hidden !important; }
+  .wa-float {
+    width: 46px !important;
+    height: 46px !important;
+    font-size: 1.35rem !important;
+    right: 14px !important;
+    bottom: 84px !important;
+  }
+}
+@media (max-width:991.98px){.hero{min-height:auto;padding:58px 0 80px}.hero-title{font-size:clamp(2.4rem,11vw,4.1rem)}.hero-sub{font-size:1.03rem}.visual-shell{border-radius:26px}.dashboard-mock{min-height:430px}.floating-card{display:none}.stat-band{margin-top:18px}.price-card.popular{transform:none}.section-pad{padding:68px 0}.benefit-copy{padding:30px}.final-cta{padding:30px}.mobile-cta{display:block}.footer{padding-bottom:88px}}@media (max-width:575.98px){.btn-pill{width:100%;justify-content:center}.hero-actions .btn{width:100%}.trust-chip{width:100%;justify-content:center}.dashboard-mock{min-height:390px;padding:16px}.mock-chart{height:136px}.section-title{font-size:2rem}.feature-card{padding:20px}.stat-card{text-align:center}.navbar .btn{width:100%;margin-top:.35rem}.price-value{font-size:2rem}}
+.wa-float{position:fixed;right:24px;bottom:24px;z-index:1070;width:62px;height:62px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#25D366,#128C7E);color:#fff!important;font-size:2rem;box-shadow:0 18px 44px rgba(18,140,126,.34),0 0 0 8px rgba(37,211,102,.12);border:2px solid rgba(255,255,255,.78);transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}.wa-float:hover{transform:translateY(-4px) scale(1.04);filter:brightness(1.03);box-shadow:0 24px 60px rgba(18,140,126,.42),0 0 0 10px rgba(37,211,102,.16)}.wa-float:focus{outline:3px solid rgba(37,211,102,.35);outline-offset:4px}.wa-float .wa-ping{position:absolute;inset:-7px;border-radius:999px;border:2px solid rgba(37,211,102,.30);animation:waPulse 1.8s ease-out infinite;pointer-events:none}.wa-float .wa-text{position:absolute;right:72px;white-space:nowrap;background:#0f172a;color:#fff;border-radius:999px;padding:.52rem .75rem;font-size:.82rem;font-weight:900;box-shadow:0 14px 34px rgba(15,23,42,.18);opacity:0;transform:translateX(8px);transition:opacity .18s ease,transform .18s ease}.wa-float:hover .wa-text,.wa-float:focus .wa-text{opacity:1;transform:translateX(0)}@keyframes waPulse{0%{transform:scale(.84);opacity:.95}70%{transform:scale(1.28);opacity:0}100%{transform:scale(1.28);opacity:0}}@media (max-width:991.98px){.wa-float{right:18px;bottom:92px;width:56px;height:56px;font-size:1.72rem}.wa-float .wa-text{display:none}}
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* Mobile Hard-Fix: Zero horizontal scroll & compact clean icons */
+html, body {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+  position: relative !important;
+  touch-action: pan-y !important;
+}
+
+@media (max-width: 767.98px) {
+  .hero {
+    min-height: auto !important;
+    padding: 30px 0 40px !important;
+    overflow: hidden !important;
+  }
+  .hero:before {
+    display: none !important;
+  }
+  .hero-title {
+    font-size: 1.85rem !important;
+    line-height: 1.15 !important;
+  }
+  .hero-sub {
+    font-size: 0.92rem !important;
+    line-height: 1.5 !important;
+  }
+  .brand-mark {
+    width: 28px !important;
+    height: 28px !important;
+    border-radius: 4px !important;
+    font-size: 0.9rem !important;
+  }
+  .feature-icon {
+    width: 38px !important;
+    height: 38px !important;
+    border-radius: 4px !important;
+    font-size: 1.1rem !important;
+    margin-bottom: 10px !important;
+  }
+  .step-no {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 10px !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 10px !important;
+  }
+  .wa-float {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 1.35rem !important;
+    right: 14px !important;
+    bottom: 74px !important;
+    box-shadow: 0 8px 24px rgba(18,140,126,.3) !important;
+    border-width: 1.5px !important;
+  }
+  .wa-float .wa-ping {
+    inset: -4px !important;
+  }
+  .wa-float .wa-text {
+    display: none !important;
+  }
+  .trust-chip {
+    font-size: 0.78rem !important;
+    padding: 0.35rem 0.6rem !important;
+  }
+  .btn-pill {
+    padding: 0.5rem 0.85rem !important;
+    font-size: 0.85rem !important;
+  }
+  .floating-card {
+    display: none !important;
+  }
+}
+</style>
+
+<style>
+  /* MODE RINGKAS: Sembunyikan kolom pelengkap (Likuiditas, RSI, Dist, Spark, Strategi) */
+  .table-simple-mode th:nth-child(3), .table-simple-mode td:nth-child(3),
+  .table-simple-mode th:nth-child(8), .table-simple-mode td:nth-child(8),
+  .table-simple-mode th:nth-child(9), .table-simple-mode td:nth-child(9),
+  .table-simple-mode th:nth-child(10), .table-simple-mode td:nth-child(10),
+  .table-simple-mode th:nth-child(11), .table-simple-mode td:nth-child(11) {
+    display: none !important;
+  }
+  .table-simple-mode td {
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    font-size: 0.85rem !important;
+  }
+  .table-simple-mode th {
+    font-size: 0.82rem !important;
+  }
+
+  /* RESPONSIVE SMARTPHONE & TABLET (Compact Card Layout) */
+  @media (max-width: 767.98px) {
+    .container-fluid {
+      padding-left: 8px !important;
+      padding-right: 8px !important;
+    }
+    #tbl tbody tr {
+      margin-bottom: 8px !important;
+      padding: 8px 10px !important;
+      border-radius: 4px !important;
+      border: 1px solid var(--bs-border-color) !important;
+      background: var(--bs-body-bg) !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.04) !important;
+    }
+    #tbl.table-simple-mode tbody tr {
+      margin-bottom: 6px !important;
+      padding: 6px 8px !important;
+    }
+    #tbl tbody td {
+      padding: 2px 0 !important;
+      font-size: 0.8rem !important;
+      min-height: 22px !important;
+    }
+    #tbl tbody td:nth-child(1) {
+      padding-bottom: 4px !important;
+      margin-bottom: 2px !important;
+      border-bottom: 1.5px solid rgba(var(--bs-primary-rgb), 0.2) !important;
+    }
+    #tbl .tlogo {
+      width: 20px !important;
+      height: 20px !important;
+    }
+    #tbl .ticker-cell {
+      gap: 5px !important;
+    }
+    .card-header {
+      padding: 8px 10px !important;
+    }
+  }
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+</style>
+
+
+<style>
+  
+/* Quick Preset Button Sharp & Minimalist Corner */
+#quickPresetBar button,
+#quickPresetBar .btn,
+.btn-mood,
+.btn-mood i,
+#quickPresetBar .badge {
+  border-radius: 3px !important;
+}
+
+  #quickPresetBar button.active {
+    font-weight: 800 !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15) !important;
+  }
+  #quickPresetBar button.btn-outline-success.active { background-color: #10b981 !important; color: #fff !important; border-color: #10b981 !important; }
+  #quickPresetBar button.btn-outline-primary.active { background-color: #2563eb !important; color: #fff !important; border-color: #2563eb !important; }
+  #quickPresetBar button.btn-outline-info.active { background-color: #0ea5e9 !important; color: #fff !important; border-color: #0ea5e9 !important; }
+  #quickPresetBar button.btn-outline-warning.active { background-color: #f59e0b !important; color: #fff !important; border-color: #f59e0b !important; }
+  #quickPresetBar button.btn-outline-secondary.active { background-color: #475569 !important; color: #fff !important; border-color: #475569 !important; }
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+</style>
+
+
+<style id="customThemeStyles">
+  :root[data-bs-theme="dark"] {
+    --bs-body-bg: #090d16;
+    --bs-body-color: #f1f5f9;
+    --bs-tertiary-bg: #111827;
+    --bs-border-color: #1e293b;
+    --bs-primary: #38bdf8;
+    --bs-card-bg: #0f172a;
+  }
+  [data-theme="dark-fintech"] body {
+    background-color: #080c14 !important;
+    color: #e2e8f0 !important;
+  }
+  [data-theme="dark-fintech"] .card {
+    background-color: #0d1527 !important;
+    border-color: #1e293b !important;
+  }
+  [data-theme="dark-fintech"] .card-header {
+    background-color: #111c35 !important;
+    border-color: #1e293b !important;
+    color: #f8fafc !important;
+  }
+  [data-theme="dark-fintech"] .navbar {
+    background: rgba(13, 21, 39, 0.95) !important;
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #1e293b !important;
+  }
+  [data-theme="dark-fintech"] .table {
+    --bs-table-bg: transparent;
+    --bs-table-striped-bg: rgba(255, 255, 255, 0.02);
+    --bs-table-hover-bg: rgba(56, 189, 248, 0.08);
+    color: #cbd5e1 !important;
+  }
+  [data-theme="dark-fintech"] #quickPresetBar,
+  [data-theme="dark-fintech"] .bg-body-tertiary {
+    background-color: #0f172a !important;
+    border-color: #1e293b !important;
+  }
+  [data-theme="dark-fintech"] .modal-content {
+    background-color: #0d1527 !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+  }
+  [data-theme="dark-fintech"] .modal-header,
+  [data-theme="dark-fintech"] .modal-footer {
+    border-color: #1e293b !important;
+  }
+  [data-theme="dark-fintech"] .form-control,
+  [data-theme="dark-fintech"] .form-select {
+    background-color: #111c35 !important;
+    border-color: #334155 !important;
+    color: #f1f5f9 !important;
+  }
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+</style>
+
+
+<style id="stickyTableHeaderCss">
+  /* Sticky Table Header & Smooth Scroll */
+  .table-responsive {
+    max-height: calc(100vh - 180px);
+    overflow-y: auto;
+    position: relative;
+  }
+  #tbl thead th {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 10 !important;
+    background-color: var(--bs-tertiary-bg) !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.12) !important;
+  }
+  [data-theme="dark-fintech"] #tbl thead th {
+    background-color: #111c35 !important;
+    color: #f8fafc !important;
+    border-bottom: 2px solid #38bdf8 !important;
+  }
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+
+/* Global Compact & Sharp Corner (0 Radius) Override */
+
+:root, [data-bs-theme=light], [data-bs-theme=dark] {
+  --bs-border-radius: 0 !important;
+  --bs-border-radius-sm: 0 !important;
+  --bs-border-radius-lg: 0 !important;
+  --bs-border-radius-xl: 0 !important;
+  --bs-border-radius-2xl: 0 !important;
+  --bs-border-radius-pill: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+}
+
+*, *::before, *::after {
+  border-radius: 0 !important;
+}
+
+.btn, .form-control, .form-select, .card, .modal-content, .badge, .dropdown-menu,
+.input-group-text, .alert, .nav-link, .nav-tabs, .list-group-item, .table,
+.appbar, .searchSheet, .bottomNav, .appDrawer, .logoBox, .metaLogoBig,
+.box, .call, .wideNote, .zonePill, .netBox, .cat, .driverFull, .kv, .quickChip, .chip, .badge2 {
+  border-radius: 0 !important;
+}
+
+.btn-sm, .form-control-sm, .form-select-sm {
+  padding: 0.2rem 0.5rem !important;
+  font-size: 0.78rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.table th, .table td {
+  padding: 0.35rem 0.5rem !important;
+  font-size: 0.8rem !important;
+}
+
+</style>
+
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg sticky-top s5d-navbar py-3"><div class="container">
+  <a class="navbar-brand brand-logo" href="/"><span class="brand-mark"><i class="bi bi-graph-up-arrow"></i></span><span>SWING5D</span></a>
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#s5dnav"><span class="navbar-toggler-icon"></span></button>
+  <div class="collapse navbar-collapse" id="s5dnav"><ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+    <li class="nav-item"><a class="nav-link" href="#fitur">Fitur</a></li>
+    <li class="nav-item"><a class="nav-link" href="#manfaat">Manfaat</a></li>
+    <li class="nav-item"><a class="nav-link" href="#paket">Paket</a></li>
+    <li class="nav-item"><a class="nav-link" href="#alur">Alur</a></li>
+    <li class="nav-item"><a class="btn btn-outline-primary btn-pill" href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a></li>
+    <li class="nav-item"><a class="btn btn-primary btn-pill btn-glow" href="/register"><i class="bi bi-rocket-takeoff"></i> Register</a></li>
+  </ul></div>
+</div></nav>
+
+<section class="hero"><div class="container hero-grid py-5"><div class="row align-items-center g-5">
+  <div class="col-lg-6">
+    <span class="kicker"><i class="bi bi-stars"></i> Analisis Saham Swing Trading 1–5 Hari</span>
+    <h1 class="hero-title">Screening saham <span class="accent">lebih cepat</span>, keputusan swing lebih terarah.</h1>
+    <p class="hero-sub">SWING5D membantu trader aktif menyaring saham Indonesia untuk horizon 1–5 hari dengan AI ranking, matrix multi-indikator, zona Buy-Hold-Sell, TP/SL, risk-reward, chart detail, psikologi pasar, akumulasi bandar, sentimen, dan fundamental ringkas.</p>
+    <div class="hero-actions">
+      <a href="/register" class="btn btn-primary btn-lg btn-pill btn-glow"><i class="bi bi-cart-check"></i> Mulai Berlangganan</a>
+      <a href="#fitur" class="btn btn-light btn-lg btn-pill border"><i class="bi bi-play-circle"></i> Lihat Keunggulan</a>
+      <a href="/login" class="btn btn-outline-primary btn-lg btn-pill"><i class="bi bi-box-arrow-in-right"></i> Login Member</a>
+    </div>
+    <div class="trust-row">
+      <span class="trust-chip"><i class="bi bi-check-circle-fill text-success"></i> Matrix multi-indikator</span>
+      <span class="trust-chip"><i class="bi bi-check-circle-fill text-success"></i> Zona harga & TP/SL</span>
+      <span class="trust-chip"><i class="bi bi-check-circle-fill text-success"></i> Payment otomatis</span>
+    </div>
+  </div>
+  <div class="col-lg-6 hero-panel">
+    <div class="visual-shell">
+      
+      <img class="hero-img" src="https://i.ibb.co.com/DHvrLkhn/image1.png" alt="Dashboard SWING5D">
+      
+    </div>
+    <div class="floating-card"><strong><i class="bi bi-bell-fill text-primary"></i> Fokus pada peluang terbaik</strong><span class="small text-muted">Prioritaskan watchlist berdasarkan skor, zona, risiko, dan momentum.</span></div>
+    <div class="small-note text-center mt-2">Hero image bisa diatur dari admin. Ukuran optimal: 1600x1000 px atau 1920x1080 px, JPG/WebP &lt; 500 KB</div>
+  </div>
+</div></div></section>
+
+<section class="stat-band"><div class="container"><div class="row g-3">
+  <div class="col-6 col-lg-3"><div class="stat-card"><h3>1–5</h3><p>Hari horizon swing</p></div></div>
+  <div class="col-6 col-lg-3"><div class="stat-card"><h3>867+</h3><p>Ticker dapat dipantau</p></div></div>
+  <div class="col-6 col-lg-3"><div class="stat-card"><h3>TP/SL</h3><p>Risk plan lebih jelas</p></div></div>
+  <div class="col-6 col-lg-3"><div class="stat-card"><h3>AI</h3><p>Ranking & probabilitas</p></div></div>
+</div></div></section>
+
+<section id="top10" class="section-pad bg-white"><div class="container">
+  <div class="section-head"><span class="kicker"><i class="bi bi-trophy-fill"></i> Watchlist cache</span><h2 class="section-title mt-3">Top 5 Saham Liquid dengan Potensi Naik Tertinggi</h2><p class="section-desc">Cuplikan kandidat dari cache terakhir, disaring memakai setting liquidity admin, lalu diurutkan berdasarkan Potensi Naik tertinggi. Jumlah ticker yang tampil bisa diatur dari Panel Admin → Setting Landing Page.</p></div>
+  <div class="feature-card p-0 overflow-hidden">
+    
+    <div class="table-responsive"><table class="table table-hover align-middle mb-0">
+      <thead class="table-light"><tr><th>#</th><th>Ticker</th><th>Potensi Naik</th><th>Risiko Turun</th><th>Liquid</th><th>Zona</th><th>Pred</th><th>Close</th><th>RR</th></tr></thead>
+      <tbody>
+      
+        <tr>
+          <td class="fw-bold text-muted">1</td>
+          <td class="fw-black fw-bold mono">CSMI</td>
+          <td><span class="badge bg-success">84.1%</span> <span class="small text-muted">Kuat</span></td>
+          <td><span class="badge bg-danger">18.3%</span> <span class="small text-muted">Rendah</span></td>
+          <td><span class="badge bg-info text-dark">Liquid</span></td>
+          <td><span class="badge text-bg-light border">BREAKOUT</span></td>
+          <td><span class="badge text-bg-primary">UP</span></td>
+          <td class="mono">332</td>
+          <td class="mono">1.57x</td>
+        </tr>
+      
+        <tr>
+          <td class="fw-bold text-muted">2</td>
+          <td class="fw-black fw-bold mono">BSSR</td>
+          <td><span class="badge bg-success">71.2%</span> <span class="small text-muted">Kuat</span></td>
+          <td><span class="badge bg-danger">6.0%</span> <span class="small text-muted">Rendah</span></td>
+          <td><span class="badge bg-info text-dark">Liquid</span></td>
+          <td><span class="badge text-bg-light border">BREAKDOWN</span></td>
+          <td><span class="badge text-bg-primary">UP</span></td>
+          <td class="mono">5.250</td>
+          <td class="mono">4.40x</td>
+        </tr>
+      
+        <tr>
+          <td class="fw-bold text-muted">3</td>
+          <td class="fw-black fw-bold mono">SMLE</td>
+          <td><span class="badge bg-success">60.3%</span> <span class="small text-muted">Menarik</span></td>
+          <td><span class="badge bg-danger">12.3%</span> <span class="small text-muted">Rendah</span></td>
+          <td><span class="badge bg-info text-dark">Liquid</span></td>
+          <td><span class="badge text-bg-light border">SELL</span></td>
+          <td><span class="badge text-bg-primary">UP</span></td>
+          <td class="mono">302</td>
+          <td class="mono">1.57x</td>
+        </tr>
+      
+        <tr>
+          <td class="fw-bold text-muted">4</td>
+          <td class="fw-black fw-bold mono">MAPI</td>
+          <td><span class="badge bg-success">58.4%</span> <span class="small text-muted">Menarik</span></td>
+          <td><span class="badge bg-danger">7.6%</span> <span class="small text-muted">Rendah</span></td>
+          <td><span class="badge bg-info text-dark">Liquid</span></td>
+          <td><span class="badge text-bg-light border">IN_BUY_ZONE</span></td>
+          <td><span class="badge text-bg-primary">UP</span></td>
+          <td class="mono">1.485</td>
+          <td class="mono">1.57x</td>
+        </tr>
+      
+        <tr>
+          <td class="fw-bold text-muted">5</td>
+          <td class="fw-black fw-bold mono">CBRE</td>
+          <td><span class="badge bg-success">58.1%</span> <span class="small text-muted">Menarik</span></td>
+          <td><span class="badge bg-danger">18.1%</span> <span class="small text-muted">Rendah</span></td>
+          <td><span class="badge bg-info text-dark">Liquid</span></td>
+          <td><span class="badge text-bg-light border">IN_BUY_ZONE</span></td>
+          <td><span class="badge text-bg-primary">UP</span></td>
+          <td class="mono">715</td>
+          <td class="mono">1.57x</td>
+        </tr>
+      
+      </tbody>
+    </table></div>
+    
+  </div>
+  <div class="small-note text-center mt-3">Top 5 hanya mengambil saham yang lolos filter liquid dari setting admin AvgVol20 ≥ 1.000.000 saham dan AvgVal20 ≥ Rp10.000.000.000, lalu diurutkan berdasarkan Potensi Naik tertinggi. Model: jika belum ada model AI terlatih, sistem memakai heuristic dan tetap menampilkan label sumber.</div>
+</div></section>
+
+<section id="fitur" class="section-pad"><div class="container">
+  <div class="section-head"><h2 class="section-title">Fitur unggulan yang membuat screening terasa seperti punya meja analis sendiri</h2><p class="section-desc">SWING5D merangkum banyak sinyal penting menjadi tampilan yang mudah dibaca, sehingga Anda bisa bergerak lebih cepat tanpa kehilangan konteks.</p></div>
+  <div class="row g-4">
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-grid-3x3-gap"></i></div><h4>Matrix Multi-Indikator</h4><p class="text-muted mb-0">Skor teknikal, candle, volume, tren, volatilitas, psikologi pasar, akumulasi bandar, sentimen, dan fundamental ringkas dalam satu view.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-cpu"></i></div><h4>AI Ranking</h4><p class="text-muted mb-0">Urutkan kandidat berdasarkan kualitas peluang, probabilitas, risk-reward, dan filter high winrate agar watchlist lebih fokus.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-bullseye"></i></div><h4>Zona Buy, Hold, Sell</h4><p class="text-muted mb-0">Bantu menentukan posisi harga: apakah masih menarik untuk diburu, sebaiknya ditahan, atau sudah mendekati area jual.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-shield-check"></i></div><h4>TP, SL, dan RR</h4><p class="text-muted mb-0">Setiap kandidat dilengkapi target, stop loss, dan risk-reward agar keputusan tidak hanya berdasarkan rasa yakin.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-activity"></i></div><h4>Chart Detail & Fibonacci</h4><p class="text-muted mb-0">Lihat konteks harga, area support-resistance, zona, dan level penting dalam tampilan detail yang rapi.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div><h4>Full Pipeline Update</h4><p class="text-muted mb-0">Data dapat diperbarui dan dihitung ulang sehingga hasil screening mengikuti kondisi market terbaru.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-phone"></i></div><h4>Tampilan Mobile</h4><p class="text-muted mb-0">Halaman detail saham dirancang agar mudah dibaca dari smartphone saat Anda perlu cek cepat.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-filter-square"></i></div><h4>Filter Likuiditas</h4><p class="text-muted mb-0">Saring saham berdasarkan harga, volume, value transaksi, zona, prediksi, dan mode ranking yang sesuai gaya trading.</p></div></div>
+    <div class="col-md-6 col-xl-4"><div class="feature-card"><div class="feature-icon"><i class="bi bi-credit-card"></i></div><h4>Berlangganan Otomatis</h4><p class="text-muted mb-0">Registrasi dan pembayaran terhubung ke Payment Hub pay.swing5d.net, akses aktif setelah status pembayaran valid.</p></div></div>
+  </div>
+</div></section>
+
+<section id="manfaat" class="benefit-section section-pad"><div class="container"><div class="benefit-panel"><div class="row g-0 align-items-stretch">
+  <div class="col-lg-6 benefit-copy"><span class="kicker bg-transparent text-info border-info"><i class="bi bi-gem"></i> Manfaat untuk trader aktif</span><h2 class="section-title mt-3">Kurangi noise, perkuat disiplin, dan bangun watchlist yang lebih masuk akal.</h2><p class="mt-3 text-secondary">Tidak semua saham layak dipantau setiap hari. SWING5D membantu menyeleksi kandidat yang punya kombinasi momentum, zona, risiko, dan kualitas sinyal lebih baik.</p><div class="benefit-list">
+    <div class="benefit-item"><i class="bi bi-check2-circle"></i><div><b>Hemat waktu screening.</b><br><span class="text-secondary">Tidak perlu membuka chart satu per satu dari awal.</span></div></div>
+    <div class="benefit-item"><i class="bi bi-check2-circle"></i><div><b>Lebih objektif.</b><br><span class="text-secondary">Gunakan skor, zona, dan RR sebagai pembanding antar saham.</span></div></div>
+    <div class="benefit-item"><i class="bi bi-check2-circle"></i><div><b>Lebih siap sebelum entry.</b><br><span class="text-secondary">TP/SL dan area harga sudah terlihat sebelum keputusan dibuat.</span></div></div>
+    <div class="benefit-item"><i class="bi bi-check2-circle"></i><div><b>Cocok untuk ritme swing pendek.</b><br><span class="text-secondary">Fokus 1–5 hari, bukan investasi jangka panjang.</span></div></div>
+  </div></div>
+  <div class="col-lg-6 benefit-image-wrap"><img class="feature-img" src="https://i.ibb.co.com/vxhYY5L7/image2.jpg" alt="Fitur analisis SWING5D"></div>
+</div></div><div class="small-note text-center mt-3">Feature image bisa diatur dari admin. Ukuran optimal: 1200x800 px, JPG/WebP &lt; 400 KB</div></div></section>
+
+<section id="alur" class="workflow section-pad"><div class="container"><div class="section-head"><h2 class="section-title">Alur singkat sampai siap dipakai</h2><p class="section-desc text-secondary">Didesain agar calon pelanggan tidak bingung: daftar, bayar, akses aktif, lalu mulai screening.</p></div><div class="row g-4">
+  <div class="col-md-6 col-xl-3"><div class="step-card"><div class="step-no">1</div><h4>Daftar akun</h4><p class="text-secondary mb-0">Isi username, email, nama, dan pilih paket sesuai kebutuhan.</p></div></div>
+  <div class="col-md-6 col-xl-3"><div class="step-card"><div class="step-no">2</div><h4>Bayar aman</h4><p class="text-secondary mb-0">Pembayaran diproses melalui Payment Hub pay.swing5d.net.</p></div></div>
+  <div class="col-md-6 col-xl-3"><div class="step-card"><div class="step-no">3</div><h4>Akses aktif</h4><p class="text-secondary mb-0">Setelah status paid valid, lisensi user aktif otomatis.</p></div></div>
+  <div class="col-md-6 col-xl-3"><div class="step-card"><div class="step-no">4</div><h4>Mulai screening</h4><p class="text-secondary mb-0">Gunakan dashboard, filter, detail chart, dan ranking untuk membangun watchlist.</p></div></div>
+</div></div></section>
+
+<section id="paket" class="section-pad"><div class="container"><div class="section-head"><h2 class="section-title">Pilih paket yang paling sesuai</h2><p class="section-desc">Mulai dari bulanan untuk mencoba, tahunan untuk pemakaian serius, atau full script untuk kebutuhan khusus.</p></div><div class="row g-4 justify-content-center">
+
+  <div class="col-md-6 col-xl-4"><div class="price-card "><h4 class="fw-black fw-bold">Aktif 1 Bulan</h4><div class="price-value my-2">Rp200.000</div><p class="price-desc">Akses aplikasi SWING5D selama 1 bulan.</p><ul class="list-unstyled text-muted small d-grid gap-2 mb-4"><li><i class="bi bi-check-circle-fill text-success"></i> Akses dashboard SWING5D</li><li><i class="bi bi-check-circle-fill text-success"></i> Screening dan detail saham</li><li><i class="bi bi-check-circle-fill text-success"></i> Matrix indikator, zona, TP/SL</li></ul><a href="/register?plan=1M" class="btn btn-primary btn-pill w-100"><i class="bi bi-cart-check"></i> Pilih Paket</a></div></div>
+
+  <div class="col-md-6 col-xl-4"><div class="price-card popular"><div class="popular-ribbon">Paling Hemat</div><h4 class="fw-black fw-bold">Aktif 1 Tahun</h4><div class="price-value my-2">Rp1.500.000</div><p class="price-desc">Akses aplikasi SWING5D selama 1 tahun.</p><ul class="list-unstyled text-muted small d-grid gap-2 mb-4"><li><i class="bi bi-check-circle-fill text-success"></i> Akses dashboard SWING5D</li><li><i class="bi bi-check-circle-fill text-success"></i> Screening dan detail saham</li><li><i class="bi bi-check-circle-fill text-success"></i> Matrix indikator, zona, TP/SL</li></ul><a href="/register?plan=1Y" class="btn btn-primary btn-pill w-100"><i class="bi bi-cart-check"></i> Pilih Paket</a></div></div>
+
+  <div class="col-md-6 col-xl-4"><div class="price-card "><h4 class="fw-black fw-bold">Private Host</h4><div class="price-value my-2">Rp2.000.000</div><p class="price-desc">Paket Private Host: aplikasi dipasang pada hosting private tersendiri yang disiapkan untuk pelanggan.</p><ul class="list-unstyled text-muted small d-grid gap-2 mb-4"><li><i class="bi bi-check-circle-fill text-success"></i> Akses dashboard SWING5D</li><li><i class="bi bi-check-circle-fill text-success"></i> Screening dan detail saham</li><li><i class="bi bi-check-circle-fill text-success"></i> Matrix indikator, zona, TP/SL</li></ul><a href="/register?plan=PRIVATE_HOST" class="btn btn-primary btn-pill w-100"><i class="bi bi-cart-check"></i> Pilih Paket</a></div></div>
+
+  <div class="col-md-6 col-xl-4"><div class="price-card "><h4 class="fw-black fw-bold">Private Server</h4><div class="price-value my-2">Rp3.000.000</div><p class="price-desc">Paket Private Server: aplikasi dipasang pada Private Virtual Server/VPS tersendiri dengan resource lebih terisolasi.</p><ul class="list-unstyled text-muted small d-grid gap-2 mb-4"><li><i class="bi bi-check-circle-fill text-success"></i> Akses dashboard SWING5D</li><li><i class="bi bi-check-circle-fill text-success"></i> Screening dan detail saham</li><li><i class="bi bi-check-circle-fill text-success"></i> Matrix indikator, zona, TP/SL</li></ul><a href="/register?plan=PRIVATE_SERVER" class="btn btn-primary btn-pill w-100"><i class="bi bi-cart-check"></i> Pilih Paket</a></div></div>
+
+</div></div></section>
+
+
+<section id="disclaimer" class="pb-5"><div class="container"><div class="disclaimer-box"><h5 class="fw-bold"><i class="bi bi-exclamation-triangle-fill"></i> Disclaimer Risiko</h5><p class="mb-0">SWING5D adalah alat bantu analisis dan screening, bukan ajakan membeli/menjual saham dan bukan nasihat keuangan. Keputusan transaksi, risiko kerugian, dan pengelolaan modal sepenuhnya menjadi tanggung jawab pengguna. Selalu gunakan manajemen risiko dan sesuaikan dengan profil risiko masing-masing.</p></div></div></section>
+
+
+<section class="pb-5"><div class="container"><div class="final-cta"><div class="row align-items-center g-4 position-relative"><div class="col-lg-8"><h2>Siap membuat proses screening saham lebih cepat dan terarah?</h2><p class="mb-0">Mulai gunakan SWING5D untuk membangun watchlist swing 1–5 hari dengan data, zona, dan risk plan yang lebih mudah dibaca.</p></div><div class="col-lg-4 text-lg-end"><a href="/register" class="btn btn-light btn-lg btn-pill"><i class="bi bi-rocket-takeoff"></i> Mulai Berlangganan</a></div></div></div></div></section>
+
+<footer class="footer py-4"><div class="container d-flex flex-wrap align-items-center justify-content-between gap-2"><div><b>SWING5D</b> • Analisis Saham Swing Trading 1–5 Hari</div><div class="d-flex gap-3"><a href="/login">Login</a><a href="/register">Register</a><a href="#disclaimer">Disclaimer</a></div></div></footer>
+<div class="mobile-cta"><div class="d-flex gap-2"><a class="btn btn-primary flex-fill" href="/register"><i class="bi bi-cart-check"></i> Berlangganan</a><a class="btn btn-outline-light flex-fill" href="/login"><i class="bi bi-box-arrow-in-right"></i> Login</a></div></div>
+<a class="wa-float" href="https://wa.me/6285729091981?text=Halo%20admin%20SWING5D%2C%20saya%20ingin%20bertanya%20tentang%20layanan%20SWING5D%20dan%20cara%20berlangganan." target="_blank" rel="noopener noreferrer" aria-label="Hubungi admin SWING5D via WhatsApp" title="Hubungi admin SWING5D via WhatsApp"><span class="wa-ping" aria-hidden="true"></span><i class="bi bi-whatsapp" aria-hidden="true"></i><span class="wa-text">Butuh bantuan?</span></a>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+
+
+
+let currentPresetFilter = 'all';
+
+let activePresets = new Set();
+
+function resetQuickPresets(){
+  activePresets.clear();
+  const container = document.getElementById('quickPresetBar');
+  if(container){
+    container.querySelectorAll('button').forEach(b => {
+      b.classList.remove('active');
+    });
+    const btnAll = document.getElementById('presetBtn_all');
+    if(btnAll) btnAll.classList.add('active');
+  }
+  applyMultiPresetFilter();
+}
+
+function toggleQuickPreset(preset, btnEl){
+  if(activePresets.has(preset)){
+    activePresets.delete(preset);
+    if(btnEl) btnEl.classList.remove('active');
+  } else {
+    activePresets.add(preset);
+    if(btnEl) btnEl.classList.add('active');
+  }
+
+  const btnAll = document.getElementById('presetBtn_all');
+  if(btnAll){
+    if(activePresets.size === 0){
+      btnAll.classList.add('active');
+    } else {
+      btnAll.classList.remove('active');
+    }
+  }
+
+  applyMultiPresetFilter();
+}
+
+function applyMultiPresetFilter(){
+  if(!dt) return;
+
+  // Clear existing quick preset search filter
+  $.fn.dataTable.ext.search = $.fn.dataTable.ext.search.filter(fn => fn._isQuickPreset !== true);
+
+  if(activePresets.size === 0){
+    dt.draw();
+    return;
+  }
+
+  const filterFn = function(settings, data, dataIndex){
+    const rowEl = dt.row(dataIndex).node();
+    const t = $(rowEl).data('ticker') || data[0] || '';
+    const r = rowsMap[String(t)] || {};
+
+    if(activePresets.has('favorite')){
+      if(!favoriteTickers.has(String(t).toUpperCase())) return false;
+    }
+
+    if(activePresets.has('buy_zone')){
+      const sig = String(r.signal || '').toUpperCase();
+      if(sig !== 'BUY' && sig !== 'IN_BUY_ZONE') return false;
+    }
+
+    if(activePresets.has('very_liquid')){
+      const liq = String(r.liquidity_label || r.liquidity_code || '').toUpperCase();
+      if(!liq.includes('VERY') && !liq.includes('SANGAT LIQUID') && !liq.includes('SANGAT LIKUID')) return false;
+    }
+
+    if(activePresets.has('high_potential')){
+      const up = parseFloat(r.up_potential_pct || r.pred_change_pct || 0);
+      if(up < 3.0) return false;
+    }
+
+    if(activePresets.has('best_rrr')){
+      const rr = parseFloat(r.rr || r.rrr || 0);
+      if(rr < 1.5) return false;
+    }
+
+    if(activePresets.has('pred_up')){
+      const pdir = String(r.pred_dir || r.pred_direction || r.direction || '').toUpperCase().trim();
+      const pchange = parseFloat(r.pred_change_pct ?? r.up_potential_pct ?? 0);
+      if(pdir !== 'UP' && pchange <= 0) return false;
+    }
+
+    return true;
+  };
+
+  filterFn._isQuickPreset = true;
+  $.fn.dataTable.ext.search.push(filterFn);
+  dt.draw();
+}
+
+// Backward compatibility alias
+function applyQuickPreset(preset, btnEl){
+  if(preset === 'all'){
+    resetQuickPresets();
+  } else {
+    toggleQuickPreset(preset, btnEl);
+  }
+}
+</script>
+</body></html>
