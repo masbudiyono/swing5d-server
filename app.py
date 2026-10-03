@@ -4,16 +4,12 @@ import json
 from datetime import datetime
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 import uvicorn
 import pandas as pd
 import yfinance as yf
 
 app = FastAPI(title="SWING5D Standalone Clone")
-templates = Jinja2Templates(directory="templates")
 
-# Cache data di memori / file
 DATA_FILE = "data/screener.json"
 os.makedirs("data", exist_ok=True)
 
@@ -88,14 +84,13 @@ def scan_stocks():
         json.dump(payload, f, indent=2)
     return payload
 
-# Background task per 5 menit
 async def cron_loop():
     while True:
         try:
             scan_stocks()
         except Exception as e:
             print("Scan error:", e)
-        await asyncio.sleep(300) # 5 menit
+        await asyncio.sleep(300)
 
 @app.on_event("startup")
 async def startup_event():
@@ -104,19 +99,20 @@ async def startup_event():
     asyncio.create_task(cron_loop())
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    data = {}
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE) as f:
-            data = json.load(f)
-    return templates.TemplateResponse("index.html", {"request": request, "payload": data})
+async def index():
+    html_path = os.path.join(os.path.dirname(__file__), "index.html")
+    if os.path.exists(html_path):
+        with open(html_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>SWING5D Server Running</h1><p><a href='/api/screener'>View API</a></p>")
 
 @app.get("/api/screener")
 async def get_screener():
     if os.path.exists(DATA_FILE):
-        with open(DATA_FILE) as f:
+        with open(DATA_FILE, "r", encoding="utf-8") as f:
             return json.load(f)
     return {"data": []}
 
 if __name__ == "__main__":
-    uvicorn.run("app:app", host="0.0.0.0", port=10000, reload=False)
+    port = int(os.environ.get("PORT", 10000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
