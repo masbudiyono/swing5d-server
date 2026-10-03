@@ -48,7 +48,7 @@
               {% for item in payload.data %}
               <tr class="hover:bg-slate-800/40 transition">
                 <td class="px-4 py-3 font-bold text-white">{{ item.symbol }}</td>
-                <td class="px-4 py-3 font-mono">{{ "{:,}".format(item.close) }}</td>
+                <td class="px-4 py-3 font-mono">{{ item.close }}</td>
                 <td class="px-4 py-3 font-semibold text-emerald-400">+{{ item.potensi_naik }}%</td>
                 <td class="px-4 py-3 font-semibold text-rose-400">-{{ item.risiko_turun }}%</td>
                 <td class="px-4 py-3 font-mono text-cyan-300">{{ item.rrr }}x</td>
